@@ -7,8 +7,8 @@ function attachEventListeners(listItem) {
     currEditBtn.addEventListener("click", () => {
         const editItemBox = document.getElementById("edit-item-box");
         toggleBox("edit");
-        editItemBox.querySelectorAll("input")[0].value = itemName;
-        editItemBox.querySelectorAll("input")[1].value = itemQuantity;
+        editItemBox.querySelector("#editItemName").value = itemName;
+        editItemBox.querySelector("#editItemQuantity").value = itemQuantity;
     });
 
     currDeleteBtn.addEventListener("click", () => {
