@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Parcel Sandbox</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="./src/styles.css" />
+    </head>
+
+    <body>
+        <h1 class="title">My Grocery List</h1>
+        <div class="main">
+            <div class="add-item">
+                <div class="add-item-title">
+                    <p class="active" id="add-title" onclick="toggleBox('add')">Add Item</p>
+                    <p id="edit-title" onclick="toggleBox('edit')">Edit Item</p>
+                </div>
+                <div class="add-item-form-holder" id="add-item-box">
+                    <form action="">
+                        <input
+                            type="text"
+                            name="itemName"
+                            placeholder="Item Name"
+                            id="addItemName"
+                        />
+                        <input
+                            type="number"
+                            name="itemQuantity"
+                            placeholder="Item Quantity"
+                            id="addItemQuantity"
+                        />
+                        <input
+                            type="submit"
+                            name="addItem"
+                            id="addItem"
+                            value="Add"
+                        />
+                    </form>
+                </div>
+				<div class="add-item-form-holder hidden" id="edit-item-box">
+                    <form action="">
+                        <input
+                            type="text"
+                            name="itemName"
+                            placeholder="Item Name"
+                            id="editItemName"
+                        />
+                        <input
+                            type="number"
+                            name="itemQuantity"
+                            placeholder="Item Quantity"
+                            id="editItemQuantity"
+                        />
+                        <input
+                            type="submit"
+                            name="addItem"
+                            id="editItem"
+                            value="Edit"
+                        />
+                    </form>
+                </div>
+            </div>
+            <div class="grocery">
+                <div class="grocery-title">Grocery List</div>
+                <div class="grocery-holder">
+                    <ul class="grocery-list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+		<script src="./src/index.js"></script>
+    </body>
+
+</html>
