@@ -26,41 +26,6 @@ function renderGroceryList() {
     } else {
         list = JSON.parse(list);
     }
-    list = [
-        {
-            itemName: "item1",
-            itemQuantity: 1,
-        },
-        {
-            itemName: "item2",
-            itemQuantity: 2,
-        },
-        {
-            itemName: "item3",
-            itemQuantity: 3,
-        },
-        {
-            itemName: "item4",
-            itemQuantity: 4,
-        },
-        {
-            itemName: "item5",
-            itemQuantity: 5,
-        },
-        {
-            itemName: "item6",
-            itemQuantity: 6,
-        },
-        {
-            itemName: "item6",
-            itemQuantity: 6,
-        },
-        {
-            itemName: "item6",
-            itemQuantity: 6,
-        },
-    ];
-    localStorage.setItem("list", JSON.stringify(list));
     const groceryList = document.querySelector(".grocery-list");
     groceryList.innerHTML = ``;
     list.forEach((listItem) => {
@@ -94,7 +59,7 @@ function toggleBox(value) {
         addItemBox.classList.remove("hidden");
     } else {
         addItemBox.querySelector("#addItemName").value = "";
-        addItemBox.querySelectorAll("#addItemQuantity").value = "";
+        addItemBox.querySelector("#addItemQuantity").value = "";
         addTitle.classList.remove("active");
         editTitle.classList.add("active");
         editItemBox.classList.remove("hidden");
@@ -110,13 +75,15 @@ function addGroceryListItem(item) {
         list = JSON.parse(list);
     }
     const foundItem = list.find((listItem) => {
-        return listItem.itemName === item.name;
+        return listItem.itemName === item.itemName;
     });
-    if (foundItem) return false;
-    list = [...list, item];
-    localStorage.setItem("list", JSON.stringify(list));
-    renderGroceryList();
-    return true;
+    if (foundItem) {
+      updateGroceryListItem(item);
+    } else {
+        list = [...list, item];
+        localStorage.setItem("list", JSON.stringify(list));
+        renderGroceryList();
+    }
 }
 
 function removeGroceryListItem(item) {
@@ -141,12 +108,13 @@ function updateGroceryListItem(item) {
         list = JSON.parse(list);
     }
     const foundItem = list.find((listItem) => {
-        return listItem.itemName === item.name;
+        return listItem.itemName === item.itemName;
     });
     if (foundItem) {
         const indexOfFoundItem = list.indexOf(foundItem);
-        foundItem.itemQuantity = item.itemQuantity;
-        list[indexOfFoundItem] = foundItem;
+        for(var key in list[indexOfFoundItem]){
+          list[indexOfFoundItem][key] = item[key];
+        }
         localStorage.setItem("list", JSON.stringify(list));
         renderGroceryList();
     } else {
@@ -154,3 +122,30 @@ function updateGroceryListItem(item) {
     }
     return true;
 }
+
+const addItemForm = document.querySelector("#add-item-box form");
+const editItemForm = document.querySelector("#edit-item-box form");
+
+addItemForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const item = Object.fromEntries(data.entries());
+    item.itemName = item.itemName.toUpperCase();
+    item.itemQuantity = parseInt(item.itemQuantity);
+    addItemForm.querySelector("#addItemName").value = "";
+    addItemForm.querySelector("#addItemQuantity").value = "";
+    addGroceryListItem(item);
+});
+
+editItemForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const item = Object.fromEntries(data.entries());
+    editItemForm.querySelector("#editItemName").value = "";
+    editItemForm.querySelector("#editItemQuantity").value = "";
+    item.itemName = item.itemName.toUpperCase();
+    item.itemQuantity = parseInt(item.itemQuantity);
+    if (!updateGroceryListItem(item)) {
+        alert("The Item Does Not Exist");
+    }
+});
