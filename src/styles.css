@@ -169,7 +169,7 @@ form input {
         width: 95%;
     }
     .grocery-holder {
-        max-height: 50rem;
+        max-height: 44rem;
     }
 }
 @media only screen and (min-width: 580px) and (max-width: 750px) {
