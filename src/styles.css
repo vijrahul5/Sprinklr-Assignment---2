@@ -5,7 +5,7 @@
 }
 
 html {
-    font-size: 90%;
+    font-size: 100%;
 }
 body {
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
@@ -19,9 +19,9 @@ body {
     padding: 1rem;
 }
 .main {
-    width: 70%;
+    width: 80%;
     margin: auto;
-    padding: 4rem;
+    padding: 2rem;
     margin-top: 3rem;
     border: 0.1rem solid black;
     border-radius: 0.2rem;
@@ -46,7 +46,7 @@ body {
     padding: 3rem 0rem;
 }
 form {
-    width: 70%;
+    width: 80%;
     margin: auto;
 }
 form input {
@@ -102,11 +102,11 @@ form input {
     border: 0.1rem solid black;
     padding: 3rem 0rem;
     overflow: scroll;
-    max-height: 30rem;
+    max-height: 27rem;
 }
 .grocery-list {
     list-style: none;
-    width: 70%;
+    width: 80%;
     margin: auto;
 }
 .grocery-list-item {
@@ -148,22 +148,32 @@ form input {
 }
 @media only screen and (min-width: 1000px) and (max-width: 1240px) {
     html {
-        font-size: 90%;
+        font-size: 120%;
     }
-    .main {
-        width: 80%;
-    }
-    .grocery-holder {
-        max-height: 56rem;
-    }
-}
-@media only screen and (min-width: 750px) and (max-width: 1000px) {
-    html {
-        font-size: 135%;
+    form {
+        width: 92%;
     }
     .main {
         width: 95%;
         padding: 1rem;
+    }
+    .grocery-list {
+        width: 95%;
+    }
+    .grocery-holder {
+        max-height: 40rem;
+    }
+}
+@media only screen and (min-width: 750px) and (max-width: 1000px) {
+    html {
+        font-size: 120%;
+    }
+    .main {
+        width: 95%;
+        padding: 1rem;
+    }
+    form {
+        width: 92%;
     }
     .grocery-list {
         width: 95%;
@@ -180,6 +190,9 @@ form input {
         width: 95%;
         padding: 1rem;
     }
+    form {
+        width: 92%;
+    }
     .grocery-list {
         width: 85%;
     }
@@ -190,7 +203,7 @@ form input {
 
 @media only screen and (min-width: 410px) and (max-width: 580px) {
     html {
-        font-size: 90%;
+        font-size: 80%;
     }
     .main {
         width: 95%;
