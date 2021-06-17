@@ -148,7 +148,7 @@ form input {
 }
 @media only screen and (min-width: 1000px) and (max-width: 1240px) {
     html {
-        font-size: 85%;
+        font-size: 90%;
     }
     .main {
         width: 80%;
@@ -159,25 +159,26 @@ form input {
 }
 @media only screen and (min-width: 750px) and (max-width: 1000px) {
     html {
-        font-size: 80%;
+        font-size: 135%;
     }
     .main {
-        width: 90%;
+        width: 95%;
+        padding: 1rem;
     }
     .grocery-list {
-        width: 80%;
+        width: 95%;
     }
     .grocery-holder {
-        max-height: 70rem;
+        max-height: 50rem;
     }
 }
 @media only screen and (min-width: 580px) and (max-width: 750px) {
     html {
-        font-size: 75%;
+        font-size: 90%;
     }
     .main {
         width: 95%;
-        padding: 2rem;
+        padding: 1rem;
     }
     .grocery-list {
         width: 85%;
@@ -189,20 +190,20 @@ form input {
 
 @media only screen and (min-width: 410px) and (max-width: 580px) {
     html {
-        font-size: 75%;
+        font-size: 90%;
     }
     .main {
         width: 95%;
-        padding: 2rem;
+        padding: 0.5rem;
     }
     form {
-        width: 85%;
+        width: 92%;
     }
     .grocery-list {
-        width: 85%;
+        width: 92%;
     }
     .grocery-list-item .name {
-        width: 45%;
+        width: 50%;
     }
     .grocery-list-item .quantity {
         width: 10%;
@@ -217,14 +218,14 @@ form input {
 }
 @media only screen and (min-width: 300px) and (max-width: 410px) {
     html {
-        font-size: 65%;
+        font-size: 90%;
     }
     .main {
         width: 95%;
-        padding: 1.5rem;
+        padding: 0.5rem;
     }
     form {
-        width: 90%;
+        width: 92%;
     }
     #itemQuantity {
         width: 50%;
@@ -235,7 +236,7 @@ form input {
         background-color: lightgray;
     }
     .grocery-list {
-        width: 90%;
+        width: 92%;
     }
     .grocery-list-item .name {
         width: 50%;
