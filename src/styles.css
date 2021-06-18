@@ -3,28 +3,43 @@
     padding: 0px;
     margin: 0px;
 }
-
+input[type="number"]::-webkit-inner-spin-button {
+    width: 8rem;
+    height: 2rem;
+}
 html {
     font-size: 100%;
 }
 body {
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
         sans-serif;
+    background-color: #d5dadf;
+}
+.header {
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    align-items: center;
+    border-bottom: 0.1rem solid black;
+}
+.header i {
+    font-size: 2.5rem;
 }
 .title {
-    background-color: lightgray;
     text-align: center;
     font-size: 2.5rem;
     font-weight: 600;
     padding: 1rem;
 }
+
 .main {
+    background-color: white;
     width: 80%;
     margin: auto;
     padding: 2rem;
     margin-top: 3rem;
     border: 0.1rem solid black;
-    border-radius: 0.2rem;
+    border-radius: 0.5rem;
 }
 .add-item {
     padding: 0.5rem;
@@ -68,8 +83,16 @@ form input {
 #addItem {
     width: 15%;
     float: right;
-    background-color: lightgray;
     cursor: pointer;
+    border: 0.1rem solid green;
+    color: green;
+    border-radius: 0.4rem;
+    background-color: white;
+}
+#addItem:hover {
+    background-color: green;
+    border: 0.1rem solid black;
+    color: white;
 }
 #editItemName {
     width: 100%;
@@ -81,8 +104,16 @@ form input {
 #editItem {
     width: 15%;
     float: right;
-    background-color: lightgray;
     cursor: pointer;
+    border: 0.1rem solid green;
+    color: green;
+    border-radius: 0.4rem;
+    background-color: white;
+}
+#editItem:hover {
+    background-color: green;
+    border: 0.1rem solid black;
+    color: white;
 }
 .grocery {
     padding: 0.5rem;
@@ -94,7 +125,7 @@ form input {
     border: 0.1px solid black;
     width: fit-content;
     padding: 0.5rem;
-    background-color: lightgray;
+    background-color: #d5dadf;
     cursor: default;
 }
 .grocery-holder {
@@ -124,65 +155,88 @@ form input {
     justify-content: left;
 }
 .grocery-list-item .quantity {
-    width: 10%;
+    width: fit-content;
+    padding: 0rem 0.8rem;
+    font-size: 0.8rem;
     display: flex;
     align-items: center;
-    justify-content: left;
+    justify-content: center;
+    color: brown;
+    border: 0.1rem solid brown;
+    border-radius: 0.4rem;
 }
 .grocery-list-item button {
     padding: 0.6rem;
     width: 12%;
-    background-color: lightgray;
-    border: 0.1rem solid black;
+    background-color: white;
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
         sans-serif;
     font-size: 1rem;
     text-align: center;
     cursor: pointer;
+    border-radius: 0.4rem;
+}
+.grocery-list-item .edit {
+    border: 0.1rem solid #0074d9;
+    color: #0074d9;
+}
+.grocery-list-item .edit:hover {
+    background-color: #0074d9;
+    border: 0.1rem solid black;
+    color: white;
+}
+.grocery-list-item .delete {
+    border: 0.1rem solid #ff4136;
+    color: #ff4136;
+}
+.grocery-list-item .delete:hover {
+    background-color: #ff4136;
+    border: 0.1rem solid black;
+    color: white;
 }
 .active {
-    background-color: lightgray;
+    background-color: #d5dadf;
 }
 .hidden {
     display: none;
 }
 @media only screen and (min-width: 1000px) and (max-width: 1240px) {
     html {
-        font-size: 120%;
+        font-size: 100%;
     }
     form {
-        width: 92%;
+        width: 85%;
     }
     .main {
-        width: 95%;
+        width: 85%;
         padding: 1rem;
     }
     .grocery-list {
-        width: 95%;
+        width: 85%;
     }
     .grocery-holder {
-        max-height: 40rem;
+        max-height: 38rem;
     }
 }
-@media only screen and (min-width: 750px) and (max-width: 1000px) {
+@media only screen and (min-width: 800px) and (max-width: 1000px) {
     html {
-        font-size: 120%;
+        font-size: 100%;
     }
     .main {
-        width: 95%;
+        width: 85%;
         padding: 1rem;
     }
     form {
-        width: 92%;
+        width: 85%;
     }
     .grocery-list {
-        width: 95%;
+        width: 85%;
     }
     .grocery-holder {
-        max-height: 44rem;
+        max-height: 38rem;
     }
 }
-@media only screen and (min-width: 580px) and (max-width: 750px) {
+@media only screen and (min-width: 580px) and (max-width: 800px) {
     html {
         font-size: 90%;
     }
@@ -195,6 +249,14 @@ form input {
     }
     .grocery-list {
         width: 85%;
+    }
+    .grocery-list-item .name {
+        width: 40%;
+    }
+
+    .grocery-list-item button {
+        padding: 0.6rem;
+        width: 21%;
     }
     .grocery-holder {
         max-height: 70rem;
@@ -231,7 +293,7 @@ form input {
 }
 @media only screen and (min-width: 300px) and (max-width: 410px) {
     html {
-        font-size: 80%;
+        font-size: 70%;
     }
     .main {
         width: 95%;
@@ -240,25 +302,27 @@ form input {
     form {
         width: 92%;
     }
-    #itemQuantity {
+    #addItemQuantity {
         width: 50%;
     }
     #addItem {
         width: 25%;
-        float: right;
-        background-color: lightgray;
+    }
+    #editItemQuantity {
+        width: 50%;
+    }
+    #editItem {
+        width: 25%;
     }
     .grocery-list {
         width: 92%;
     }
     .grocery-list-item .name {
-        width: 50%;
+        width: 45%;
     }
-    .grocery-list-item .quantity {
-        width: 10%;
-    }
+
     .grocery-list-item button {
-        padding: 0.6rem;
+        padding: 0.3rem;
         width: 20%;
     }
     .grocery-holder {

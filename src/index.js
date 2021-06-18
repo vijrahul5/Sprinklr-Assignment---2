@@ -1,17 +1,18 @@
-function attachEventListeners(listItem) {
-    const itemName = listItem.getAttribute("itemName");
-    const itemQuantity = parseInt(listItem.getAttribute("itemQuantity"));
-    const currEditBtn = listItem.querySelector(".edit");
-    const currDeleteBtn = listItem.querySelector(".delete");
+// Attaching event listeners to the edit and delete buttons of each grocery list item
+function attachEventListeners(groceryListItem) {
+    const itemName = groceryListItem.getAttribute("itemName");
+    const itemQuantity = parseInt(groceryListItem.getAttribute("itemQuantity"));
+    const editBtn = groceryListItem.querySelector(".edit");
+    const deleteBtn = groceryListItem.querySelector(".delete");
 
-    currEditBtn.addEventListener("click", () => {
+    editBtn.addEventListener("click", () => {
         const editItemBox = document.getElementById("edit-item-box");
         toggleBox("edit");
-        editItemBox.querySelector("#editItemName").value = itemName;
+        editItemBox.querySelector("#editItemName").value = itemName; // Populating the edit form with details of selected grocery list item
         editItemBox.querySelector("#editItemQuantity").value = itemQuantity;
     });
 
-    currDeleteBtn.addEventListener("click", () => {
+    deleteBtn.addEventListener("click", () => {
         removeGroceryListItem({
             itemName: itemName,
             itemQuantity: itemQuantity,
@@ -19,6 +20,7 @@ function attachEventListeners(listItem) {
     });
 }
 
+// Function to render the grocery list from the local storage onto the DOM
 function renderGroceryList() {
     let list = localStorage.getItem("list");
     if (list === null) {
@@ -28,29 +30,30 @@ function renderGroceryList() {
     }
     const groceryList = document.querySelector(".grocery-list");
     groceryList.innerHTML = ``;
-    list.forEach((listItem) => {
-        const currListItem = document.createElement("li");
-        currListItem.classList.add("grocery-list-item");
-        currListItem.setAttribute("itemName", listItem.itemName);
-        currListItem.setAttribute("itemQuantity", listItem.itemQuantity);
-        currListItem.innerHTML = `
-          <p class ="name">${listItem.itemName}</p>
-          <p class= "quantity">${listItem.itemQuantity}</p>
+    list.forEach(({ itemName, itemQuantity }) => {
+        const groceryListItem = document.createElement("li");
+        groceryListItem.classList.add("grocery-list-item");
+        groceryListItem.setAttribute("itemName", itemName);
+        groceryListItem.setAttribute("itemQuantity", itemQuantity);
+        groceryListItem.innerHTML = `
+          <p class ="name">${itemName}</p>
+          <p class= "quantity">x${itemQuantity}</p>
           <button class ="edit">Edit</button>
           <button class ="delete">Delete</button>
         `;
-        attachEventListeners(currListItem);
-        groceryList.appendChild(currListItem);
+        attachEventListeners(groceryListItem);
+        groceryList.appendChild(groceryListItem);
     });
 }
 renderGroceryList();
 
-function toggleBox(value) {
+// Function for switching between add and edit forms
+function toggleBox(item) {
     const addTitle = document.getElementById("add-title");
     const editTitle = document.getElementById("edit-title");
     const addItemBox = document.getElementById("add-item-box");
     const editItemBox = document.getElementById("edit-item-box");
-    if (value === "add") {
+    if (item === "add") {
         editItemBox.querySelector("#editItemName").value = "";
         editItemBox.querySelector("#editItemQuantity").value = "";
         addTitle.classList.add("active");
@@ -67,6 +70,7 @@ function toggleBox(value) {
     }
 }
 
+// Function to add a grocery list item to the grocery list
 function addGroceryListItem(item) {
     let list = localStorage.getItem("list");
     if (list === null) {
@@ -78,7 +82,7 @@ function addGroceryListItem(item) {
         return listItem.itemName === item.itemName;
     });
     if (foundItem) {
-      updateGroceryListItem(item);
+        updateGroceryListItem(item);
     } else {
         list = [...list, item];
         localStorage.setItem("list", JSON.stringify(list));
@@ -86,6 +90,7 @@ function addGroceryListItem(item) {
     }
 }
 
+// Function to remove a grocery list item from the grocery list
 function removeGroceryListItem(item) {
     let list = localStorage.getItem("list");
     if (list === null) {
@@ -100,6 +105,7 @@ function removeGroceryListItem(item) {
     renderGroceryList();
 }
 
+// Function to update a grocery list item already present in the grocery list
 function updateGroceryListItem(item) {
     let list = localStorage.getItem("list");
     if (list === null) {
@@ -112,8 +118,8 @@ function updateGroceryListItem(item) {
     });
     if (foundItem) {
         const indexOfFoundItem = list.indexOf(foundItem);
-        for(var key in list[indexOfFoundItem]){
-          list[indexOfFoundItem][key] = item[key];
+        for (var key in list[indexOfFoundItem]) {
+            list[indexOfFoundItem][key] = item[key];
         }
         localStorage.setItem("list", JSON.stringify(list));
         renderGroceryList();
@@ -122,7 +128,7 @@ function updateGroceryListItem(item) {
     }
     return true;
 }
-
+// Attaching event listeners to the add and edit forms
 const addItemForm = document.querySelector("#add-item-box form");
 const editItemForm = document.querySelector("#edit-item-box form");
 
@@ -130,6 +136,11 @@ addItemForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
     const item = Object.fromEntries(data.entries());
+    if (item.itemName == "" || item.itemQuantity == "") {
+        alert("Please Fill All The Fields");
+        location.reload();
+        return;
+    }
     item.itemName = item.itemName.toUpperCase();
     item.itemQuantity = parseInt(item.itemQuantity);
     addItemForm.querySelector("#addItemName").value = "";
@@ -141,11 +152,27 @@ editItemForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
     const item = Object.fromEntries(data.entries());
-    editItemForm.querySelector("#editItemName").value = "";
-    editItemForm.querySelector("#editItemQuantity").value = "";
+    if (item.itemName == "" || item.itemQuantity == "") {
+        alert("Please Fill All The Fields");
+        location.reload();
+        return;
+    }
     item.itemName = item.itemName.toUpperCase();
     item.itemQuantity = parseInt(item.itemQuantity);
+    editItemForm.querySelector("#editItemName").value = "";
+    editItemForm.querySelector("#editItemQuantity").value = "";
     if (!updateGroceryListItem(item)) {
         alert("The Item Does Not Exist");
     }
+});
+
+// Attaching event listeners for switching between add and edit forms
+const addTitle = document.querySelector("#add-title");
+const editTitle = document.querySelector("#edit-title");
+
+addTitle.addEventListener("click", () => {
+    toggleBox("add");
+});
+editTitle.addEventListener("click", () => {
+    toggleBox("edit");
 });
