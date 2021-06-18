@@ -38,6 +38,7 @@ body {
     margin: auto;
     padding: 2rem;
     margin-top: 3rem;
+    margin-bottom: 3rem;
     border: 0.1rem solid black;
     border-radius: 0.5rem;
 }
@@ -133,7 +134,7 @@ form input {
     border: 0.1rem solid black;
     padding: 3rem 0rem;
     overflow: scroll;
-    max-height: 27rem;
+    max-height: 40rem;
 }
 .grocery-list {
     list-style: none;
@@ -214,9 +215,6 @@ form input {
     .grocery-list {
         width: 85%;
     }
-    .grocery-holder {
-        max-height: 38rem;
-    }
 }
 @media only screen and (min-width: 800px) and (max-width: 1000px) {
     html {
@@ -231,9 +229,6 @@ form input {
     }
     .grocery-list {
         width: 85%;
-    }
-    .grocery-holder {
-        max-height: 38rem;
     }
 }
 @media only screen and (min-width: 580px) and (max-width: 800px) {
@@ -257,9 +252,6 @@ form input {
     .grocery-list-item button {
         padding: 0.6rem;
         width: 21%;
-    }
-    .grocery-holder {
-        max-height: 70rem;
     }
 }
 
@@ -286,9 +278,6 @@ form input {
     .grocery-list-item button {
         padding: 0.6rem;
         width: 18%;
-    }
-    .grocery-holder {
-        max-height: 70rem;
     }
 }
 @media only screen and (min-width: 300px) and (max-width: 410px) {
@@ -324,8 +313,5 @@ form input {
     .grocery-list-item button {
         padding: 0.3rem;
         width: 20%;
-    }
-    .grocery-holder {
-        max-height: 70rem;
     }
 }
