@@ -1,7 +1,7 @@
 // Attaching event listeners to the edit and delete buttons of each grocery list item
 function attachEventListeners(groceryListItem) {
     const itemName = groceryListItem.getAttribute("itemName");
-    const itemQuantity = parseInt(groceryListItem.getAttribute("itemQuantity"));
+    const itemQuantity = parseInt(groceryListItem.getAttribute("itemQuantity"),10);
     const editBtn = groceryListItem.querySelector(".edit");
     const deleteBtn = groceryListItem.querySelector(".delete");
 
@@ -136,13 +136,13 @@ addItemForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
     const item = Object.fromEntries(data.entries());
-    if (item.itemName == "" || item.itemQuantity == "") {
+    if (item.itemName === "" || item.itemQuantity === "") {
         alert("Please Fill All The Fields");
         location.reload();
         return;
     }
     item.itemName = item.itemName.toUpperCase();
-    item.itemQuantity = parseInt(item.itemQuantity);
+    item.itemQuantity = parseInt(item.itemQuantity,10);
     addItemForm.querySelector("#addItemName").value = "";
     addItemForm.querySelector("#addItemQuantity").value = "";
     addGroceryListItem(item);
@@ -152,13 +152,13 @@ editItemForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
     const item = Object.fromEntries(data.entries());
-    if (item.itemName == "" || item.itemQuantity == "") {
+    if (item.itemName === "" || item.itemQuantity === "") {
         alert("Please Fill All The Fields");
         location.reload();
         return;
     }
     item.itemName = item.itemName.toUpperCase();
-    item.itemQuantity = parseInt(item.itemQuantity);
+    item.itemQuantity = parseInt(item.itemQuantity,10);
     editItemForm.querySelector("#editItemName").value = "";
     editItemForm.querySelector("#editItemQuantity").value = "";
     if (!updateGroceryListItem(item)) {
