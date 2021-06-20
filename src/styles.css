@@ -148,6 +148,7 @@ form input {
     border: 0.1rem solid black;
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
 }
 .grocery-list-item .name {
     width: 60%;
@@ -157,7 +158,7 @@ form input {
 }
 .grocery-list-item .quantity {
     width: fit-content;
-    padding: 0rem 0.8rem;
+    padding: 0.8rem 0.8rem;
     font-size: 0.8rem;
     display: flex;
     align-items: center;
