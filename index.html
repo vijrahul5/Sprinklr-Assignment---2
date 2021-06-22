@@ -16,56 +16,30 @@
             <i class="fa fa-shopping-cart"></i>
         </div>
         <div class="main">
-            <div class="add-item">
-                <div class="add-item-title">
-                    <p class="active" id="add-title">Add Item</p>
-                    <p id="edit-title">Edit Item</p>
+            <div class="form-section">
+                <div class="form-section-title">
+                    <p>Add Item</p>
                 </div>
-                <div class="add-item-form-holder" id="add-item-box">
-                    <form action="">
+                <div class="form-holder" id="form-holder">
+                    <form action="" itemid="">
                         <input
                             for="itemName"
                             type="text"
                             name="itemName"
                             placeholder="Item Name"
-                            id="addItemName"
+                            id="inputItemName"
                         />
                         <input
                             type="number"
                             name="itemQuantity"
                             placeholder="Item Quantity"
-                            id="addItemQuantity"
+                            id="inputItemQuantity"
                             min="1"
                         />
-                        <input
-                            type="submit"
-                            name="addItem"
-                            id="addItem"
-                            value="Add"
-                        />
-                    </form>
-                </div>
-                <div class="add-item-form-holder hidden" id="edit-item-box">
-                    <form action="">
-                        <input
-                            type="text"
-                            name="itemName"
-                            placeholder="Item Name"
-                            id="editItemName"
-                        />
-                        <input
-                            type="number"
-                            name="itemQuantity"
-                            placeholder="Item Quantity"
-                            id="editItemQuantity"
-                            min="1"
-                        />
-                        <input
-                            type="submit"
-                            name="addItem"
-                            id="editItem"
-                            value="Edit"
-                        />
+                        <input type="submit" id="inputItem" value="Add" />
+                        <button class="cancelBtn hidden" type="button">
+                            Cancel
+                        </button>
                     </form>
                 </div>
             </div>

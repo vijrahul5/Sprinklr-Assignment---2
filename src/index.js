@@ -1,178 +1,216 @@
-// Attaching event listeners to the edit and delete buttons of each grocery list item
-function attachEventListeners(groceryListItem) {
-    const itemName = groceryListItem.getAttribute("itemName");
-    const itemQuantity = parseInt(groceryListItem.getAttribute("itemQuantity"),10);
-    const editBtn = groceryListItem.querySelector(".edit");
-    const deleteBtn = groceryListItem.querySelector(".delete");
+// I have tried to use the MVC architecture as learned from the course shared.
+const model = {
+    // Model : Stores all list data and provides methods for access
+    list: [],
+    getListStorage: function () {
+        let currList = localStorage.getItem("list");
+        if (currList === null) {
+            currList = [];
+        } else {
+            currList = JSON.parse(currList);
+        }
+        this.list = currList;
+        return this.list;
+    },
+    setListStorage: function (newList) {
+        this.list = newList;
+        localStorage.setItem("list", JSON.stringify(newList));
+        return "";
+    },
+};
 
-    editBtn.addEventListener("click", () => {
-        const editItemBox = document.getElementById("edit-item-box");
-        toggleBox("edit");
-        editItemBox.querySelector("#editItemName").value = itemName; // Populating the edit form with details of selected grocery list item
-        editItemBox.querySelector("#editItemQuantity").value = itemQuantity;
-    });
-
-    deleteBtn.addEventListener("click", () => {
-        removeGroceryListItem({
-            itemName: itemName,
-            itemQuantity: itemQuantity,
+const controller = {
+    // Controller : Includes all methods that connect and interact with the Model and the View
+    init: function () {
+        const list = model.getListStorage();
+        view.init();
+        view.renderGroceryList(list);
+    },
+    addGroceryListItem: function (item) {
+        // Adds a Grocery List Item to the Grocery List
+        let list = model.list;
+        const foundItem = this.checkSameName(item);
+        if (foundItem) {
+            item.itemQuantity += foundItem.itemQuantity;
+            item.itemId = foundItem.itemId;
+            this.updateGroceryListItem(item);
+            return "Quantity Incremented Successfully !";
+        } else {
+            item.itemId = Date.now().toString();
+            list = [...list, item];
+            model.setListStorage(list);
+            view.renderGroceryList(list);
+            return "Item Added Successfully !";
+        }
+    },
+    updateGroceryListItem: function (item) {
+        // Updates a Grocery List Item present in the Grocery List
+        let list = model.list;
+        const foundItem = this.checkSameId(item);
+        if (foundItem) {
+            for (let key in foundItem) {
+                foundItem[key] = item[key];
+            }
+            newFoundItem = this.checkSameNameDiffId(foundItem);
+            if (newFoundItem) {
+                return "Cannot Have Two Items With Same Name !";
+            }
+            const indexOfFoundItem = list.indexOf(foundItem);
+            list[indexOfFoundItem] = item;
+            model.setListStorage(list);
+            view.renderGroceryList(list);
+        } else {
+            return "The Item Does Not Exist In The List !";
+        }
+        return "Successfully Updated !";
+    },
+    removeGroceryListItem: function (item) {
+        // Removes a Grocery List Item present in the Grocery List
+        let list = model.list;
+        list = list.filter((listItem) => {
+            return listItem.itemName !== item.itemName;
         });
-    });
-}
+        model.setListStorage(list);
+        view.renderGroceryList(list);
+        return "Item Successfully Removed !";
+    },
+    checkSameName: function (item) {
+        // Checks if there is an grocery list item with the same name already present
+        let list = model.list;
+        const foundItem = list.find((listItem) => {
+            return listItem.itemName === item.itemName;
+        });
+        return foundItem;
+    },
+    checkSameId: function (item) {
+        // Checks if there is an grocery list item with the same id already present
+        let list = model.list;
+        const foundItem = list.find((listItem) => {
+            return listItem.itemId === item.itemId;
+        });
+        return foundItem;
+    },
+    checkSameNameDiffId: function (item) {
+        // Checks if there is an grocery list item with the same name but different id already present
+        let list = model.list;
+        console.log(list, item);
+        const foundItem = list.find((listItem) => {
+            return (
+                listItem.itemName === item.itemName &&
+                listItem.itemId !== item.itemId
+            );
+        });
+        return foundItem;
+    },
+};
 
-// Function to render the grocery list from the local storage onto the DOM
-function renderGroceryList() {
-    let list = localStorage.getItem("list");
-    if (list === null) {
-        list = [];
-    } else {
-        list = JSON.parse(list);
-    }
-    const groceryList = document.querySelector(".grocery-list");
-    groceryList.innerHTML = ``;
-    list.forEach(({ itemName, itemQuantity }) => {
+const view = {
+    init: function () {
+        this.groceryList = document.querySelector(".grocery-list");
+        this.form = document.querySelector(".form-holder>form");
+        this.formTitle = document.querySelector(".form-section-title >p");
+        this.formSubmitBtn = document.querySelector(".form-holder #inputItem");
+        this.cancelEditBtn = document.querySelector(".form-holder .cancelBtn");
+        this.currentForm = "add";
+        this.attachELToForm();
+    },
+    createGroceryListItem: function ({ itemName, itemQuantity, itemId }) {
+        // Creates a grocery list item ready to be rendered
         const groceryListItem = document.createElement("li");
         groceryListItem.classList.add("grocery-list-item");
         groceryListItem.setAttribute("itemName", itemName);
         groceryListItem.setAttribute("itemQuantity", itemQuantity);
+        groceryListItem.setAttribute("itemId", itemId);
         groceryListItem.innerHTML = `
-          <p class ="name">${itemName}</p>
-          <p class= "quantity">x${itemQuantity}</p>
-          <button class ="edit">Edit</button>
-          <button class ="delete">Delete</button>
+        <p class ="name">${itemName}</p>
+        <p class= "quantity">x${itemQuantity}</p>
+        <button class ="edit">Edit</button>
+        <button class ="delete">Delete</button>
         `;
-        attachEventListeners(groceryListItem);
-        groceryList.appendChild(groceryListItem);
-    });
-}
-renderGroceryList();
+        return groceryListItem;
+    },
+    renderGroceryList: function (list) {
+        // Renders the Grocery List
+        this.groceryList.innerHTML = ``;
+        list.forEach((listItem) => {
+            const groceryListItem = this.createGroceryListItem(listItem);
+            this.attachELToGroceryListItem(groceryListItem);
+            this.groceryList.appendChild(groceryListItem);
+        });
+    },
+    attachELToGroceryListItem: function (groceryListItem) {
+        // Attaches event listeners to the edit and delete buttons of each grocery list item
+        const itemName = groceryListItem.getAttribute("itemName");
+        const itemQuantity = parseInt(
+            groceryListItem.getAttribute("itemQuantity"),
+            10
+        );
+        const itemId = groceryListItem.getAttribute("itemId");
+        const editBtn = groceryListItem.querySelector(".edit");
+        const deleteBtn = groceryListItem.querySelector(".delete");
 
-// Function for switching between add and edit forms
-function toggleBox(item) {
-    const addTitle = document.getElementById("add-title");
-    const editTitle = document.getElementById("edit-title");
-    const addItemBox = document.getElementById("add-item-box");
-    const editItemBox = document.getElementById("edit-item-box");
-    if (item === "add") {
-        editItemBox.querySelector("#editItemName").value = "";
-        editItemBox.querySelector("#editItemQuantity").value = "";
-        addTitle.classList.add("active");
-        editTitle.classList.remove("active");
-        editItemBox.classList.add("hidden");
-        addItemBox.classList.remove("hidden");
-    } else {
-        addItemBox.querySelector("#addItemName").value = "";
-        addItemBox.querySelector("#addItemQuantity").value = "";
-        addTitle.classList.remove("active");
-        editTitle.classList.add("active");
-        editItemBox.classList.remove("hidden");
-        addItemBox.classList.add("hidden");
-    }
-}
+        editBtn.addEventListener("click", () => {
+            this.toggleForm("edit");
+            this.form.querySelector("#inputItemName").value = itemName;
+            this.form.querySelector("#inputItemQuantity").value = itemQuantity;
+            this.form.setAttribute("itemId", itemId);
+        });
 
-// Function to add a grocery list item to the grocery list
-function addGroceryListItem(item) {
-    let list = localStorage.getItem("list");
-    if (list === null) {
-        list = [];
-    } else {
-        list = JSON.parse(list);
-    }
-    const foundItem = list.find((listItem) => {
-        return listItem.itemName === item.itemName;
-    });
-    if (foundItem) {
-        updateGroceryListItem(item);
-    } else {
-        list = [...list, item];
-        localStorage.setItem("list", JSON.stringify(list));
-        renderGroceryList();
-    }
-}
-
-// Function to remove a grocery list item from the grocery list
-function removeGroceryListItem(item) {
-    let list = localStorage.getItem("list");
-    if (list === null) {
-        list = [];
-    } else {
-        list = JSON.parse(list);
-    }
-    list = list.filter((listItem) => {
-        return listItem.itemName !== item.itemName;
-    });
-    localStorage.setItem("list", JSON.stringify(list));
-    renderGroceryList();
-}
-
-// Function to update a grocery list item already present in the grocery list
-function updateGroceryListItem(item) {
-    let list = localStorage.getItem("list");
-    if (list === null) {
-        list = [];
-    } else {
-        list = JSON.parse(list);
-    }
-    const foundItem = list.find((listItem) => {
-        return listItem.itemName === item.itemName;
-    });
-    if (foundItem) {
-        const indexOfFoundItem = list.indexOf(foundItem);
-        for (var key in list[indexOfFoundItem]) {
-            list[indexOfFoundItem][key] = item[key];
+        deleteBtn.addEventListener("click", () => {
+            let message = controller.removeGroceryListItem({
+                itemName,
+                itemQuantity,
+                itemId,
+            });
+            alert(message);
+        });
+    },
+    toggleForm: function (data) {
+        // Toggles between the edit and add item states
+        this.form.querySelector("#inputItemName").value = "";
+        this.form.querySelector("#inputItemQuantity").value = "";
+        if (data == "add") {
+            this.currentForm = "add";
+            this.formTitle.textContent = "Add Item";
+            this.form.setAttribute("itemId", "");
+            this.cancelEditBtn.classList.add("hidden");
+            this.formSubmitBtn.value = "Add";
+        } else {
+            this.currentForm = "edit";
+            this.formTitle.textContent = "Edit Item";
+            this.cancelEditBtn.classList.remove("hidden");
+            this.formSubmitBtn.value = "Save";
         }
-        localStorage.setItem("list", JSON.stringify(list));
-        renderGroceryList();
-    } else {
-        return false;
-    }
-    return true;
-}
-// Attaching event listeners to the add and edit forms
-const addItemForm = document.querySelector("#add-item-box form");
-const editItemForm = document.querySelector("#edit-item-box form");
+    },
+    attachELToForm: function () {
+        // Attaches event listeners to the save/add/cancel buttons on the form
+        this.form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const data = new FormData(event.target);
+            const item = Object.fromEntries(data.entries());
+            if (item.itemName === "" || item.itemQuantity === "") {
+                alert("Please Fill All The Fields");
+                location.reload();
+                return;
+            }
+            item.itemName = item.itemName.toUpperCase();
+            item.itemQuantity = parseInt(item.itemQuantity, 10);
+            this.form.querySelector("#inputItemName").value = "";
+            this.form.querySelector("#inputItemQuantity").value = "";
+            if (view.currentForm == "add") {
+                let message = controller.addGroceryListItem(item);
+                alert(message);
+            } else {
+                item.itemId = this.form.getAttribute("itemId");
+                let message = controller.updateGroceryListItem(item);
+                alert(message);
+                this.toggleForm("add");
+            }
+        });
+        this.cancelEditBtn.addEventListener("click", () => {
+            this.toggleForm("add");
+        });
+    },
+};
 
-addItemForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const data = new FormData(event.target);
-    const item = Object.fromEntries(data.entries());
-    if (item.itemName === "" || item.itemQuantity === "") {
-        alert("Please Fill All The Fields");
-        location.reload();
-        return;
-    }
-    item.itemName = item.itemName.toUpperCase();
-    item.itemQuantity = parseInt(item.itemQuantity,10);
-    addItemForm.querySelector("#addItemName").value = "";
-    addItemForm.querySelector("#addItemQuantity").value = "";
-    addGroceryListItem(item);
-});
-
-editItemForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const data = new FormData(event.target);
-    const item = Object.fromEntries(data.entries());
-    if (item.itemName === "" || item.itemQuantity === "") {
-        alert("Please Fill All The Fields");
-        location.reload();
-        return;
-    }
-    item.itemName = item.itemName.toUpperCase();
-    item.itemQuantity = parseInt(item.itemQuantity,10);
-    editItemForm.querySelector("#editItemName").value = "";
-    editItemForm.querySelector("#editItemQuantity").value = "";
-    if (!updateGroceryListItem(item)) {
-        alert("The Item Does Not Exist");
-    }
-});
-
-// Attaching event listeners for switching between add and edit forms
-const addTitle = document.querySelector("#add-title");
-const editTitle = document.querySelector("#edit-title");
-
-addTitle.addEventListener("click", () => {
-    toggleBox("add");
-});
-editTitle.addEventListener("click", () => {
-    toggleBox("edit");
-});
+controller.init(); // Initialising our app using the controller
